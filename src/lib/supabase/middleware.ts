@@ -28,29 +28,30 @@ export async function updateSession(request: NextRequest) {
   );
 
   // Refresh session if needed
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  // Uncomment when login/dashboard pages are created
+  // const {
+  //   data: { user },
+  // } = await supabase.auth.getUser();
 
-  // Protected routes
-  const protectedPaths = ['/dashboard'];
-  const isProtectedPath = protectedPaths.some(path =>
-    request.nextUrl.pathname.startsWith(path)
-  );
+  // Protected routes - disabled until pages are created
+  // const protectedPaths = ['/dashboard'];
+  // const isProtectedPath = protectedPaths.some(path =>
+  //   request.nextUrl.pathname.startsWith(path)
+  // );
 
   // Redirect to login if accessing protected route without auth
-  if (isProtectedPath && !user) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/login';
-    return NextResponse.redirect(url);
-  }
+  // if (isProtectedPath && !user) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = '/login';
+  //   return NextResponse.redirect(url);
+  // }
 
   // Redirect to dashboard if accessing login while authenticated
-  if (request.nextUrl.pathname === '/login' && user) {
-    const url = request.nextUrl.clone();
-    url.pathname = '/dashboard';
-    return NextResponse.redirect(url);
-  }
+  // if (request.nextUrl.pathname === '/login' && user) {
+  //   const url = request.nextUrl.clone();
+  //   url.pathname = '/dashboard';
+  //   return NextResponse.redirect(url);
+  // }
 
   return supabaseResponse;
 }
