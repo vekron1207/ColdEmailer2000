@@ -1,0 +1,45 @@
+'use client';
+
+import { ThemeProvider, CssBaseline } from '@mui/material';
+import { useState, useEffect, useMemo } from 'react';
+import getTheme, { ThemeMode } from '@/theme';
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const [mode, setMode] = useState<ThemeMode>('light');
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    const savedMode = localStorage.getItem('theme-mode') as ThemeMode;
+    if (savedMode && (savedMode === 'light' || savedMode === 'dark')) {
+      setMode(savedMode);
+    }
+  }, []);
+
+  const theme = useMemo(() => getTheme(mode), [mode]);
+
+  // Prevent flash of wrong theme
+  if (!mounted) {
+    return null;
+  }
+
+  return (
+    <html lang="en">
+      <head>
+        <meta charSet="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Automated Email Sender</title>
+      </head>
+      <body>
+        <ThemeProvider theme={theme}>
+          <CssBaseline />
+          {children}
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
